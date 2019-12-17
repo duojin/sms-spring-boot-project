@@ -1,0 +1,10 @@
+cscc:
+  sms:
+    aliyun:
+      appid: xxxx
+      alikey: 555
+    guodu:
+      appid: yyyy
+      guodukey: 123
+
+debug: true
