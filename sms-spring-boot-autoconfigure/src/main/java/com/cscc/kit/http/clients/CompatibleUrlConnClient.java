@@ -20,7 +20,7 @@ import java.util.concurrent.Future;
  * @author VK.Gao
  * @date 2018/03/28
  */
-public class CompatibleUrlConnClient extends IHttpClient {
+public class CompatibleUrlConnClient extends AbstractHttpClient {
 
     protected static final String CONTENT_TYPE = "Content-Type";
     protected static final String CONTENT_LENGTH = "Content-Length";
@@ -32,6 +32,7 @@ public class CompatibleUrlConnClient extends IHttpClient {
         super(clientConfig);
     }
 
+    @Override
     protected void init(HttpClientConfig clientConfig) throws ClientException {
         this.sslSocketFactory = clientConfig.getSslSocketFactory();
         if (clientConfig.isIgnoreSSLCerts()) {

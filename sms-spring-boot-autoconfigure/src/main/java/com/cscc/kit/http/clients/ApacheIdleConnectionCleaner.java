@@ -25,6 +25,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.conn.HttpClientConnectionManager;
 
+/**
+ * @author ajoe.Liu
+ */
 public class ApacheIdleConnectionCleaner extends Thread {
 
     private static final Log LOG = LogFactory.getLog(ApacheIdleConnectionCleaner.class);

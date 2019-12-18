@@ -10,7 +10,7 @@ import org.springframework.core.type.AnnotationMetadata;
 
 /**
  * @Description: 自动配置入口
- * @Author ajoe
+ * @author ajoe.Liu
  * @Date 2019/12/16 17:34
  */
 @Configuration(proxyBeanMethods = false)

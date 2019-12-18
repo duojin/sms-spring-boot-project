@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 /**
- * @author ajoe
+ * @author ajoe.Liu
  */
 @Data
 @ToString

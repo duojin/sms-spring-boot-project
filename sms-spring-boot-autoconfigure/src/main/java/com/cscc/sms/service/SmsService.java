@@ -7,7 +7,7 @@ import com.cscc.sms.domain.SmsResponse;
 
 /**
  * @Description: 短信服务接口
- * @Author ajoe
+ * @author ajoe.Liu
  * @Date 2019/12/16 14:35
  */
 public interface SmsService {

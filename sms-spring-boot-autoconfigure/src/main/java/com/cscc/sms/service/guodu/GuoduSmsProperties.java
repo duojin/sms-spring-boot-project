@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import java.util.List;
 
 /**
- * @author ajoe
+ * @author ajoe.Liu
  */
 @Data
 @ToString
@@ -28,7 +28,17 @@ public class GuoduSmsProperties {
     private String appkey;
 
     /**
-     * 请求基地址
+     * 发送短信地址组
      */
-    private List<String> serverBaseUrls;
+    private List<String> sendUrls;
+
+    /**
+     * 查询短信地址组
+     */
+    private List<String> queryUrls;
+
+    /**
+     * 短信开关
+     */
+    private boolean open = false;
 }

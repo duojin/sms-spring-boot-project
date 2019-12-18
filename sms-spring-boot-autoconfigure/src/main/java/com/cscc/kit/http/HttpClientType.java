@@ -15,13 +15,13 @@ public enum HttpClientType {
     Custom(null),
     ;
 
-    private Class<? extends IHttpClient> implClass;
+    private Class<? extends AbstractHttpClient> implClass;
 
-    HttpClientType(Class<? extends IHttpClient> implClass) {
+    HttpClientType(Class<? extends AbstractHttpClient> implClass) {
         this.implClass = implClass;
     }
 
-    public Class<? extends IHttpClient> getImplClass() {
+    public Class<? extends AbstractHttpClient> getImplClass() {
         return implClass;
     }
 }

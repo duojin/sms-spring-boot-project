@@ -20,7 +20,7 @@ package com.cscc.kit.http;
 
 import java.util.Map;
 
-public class HttpRequest extends HttpMessage {
+public class HttpRequest extends AbstractHttpMessage {
 
     public HttpRequest(String strUrl) {
         super(strUrl);

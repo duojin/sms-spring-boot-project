@@ -14,9 +14,8 @@ import com.cscc.kit.http.CallBack;
 import com.cscc.kit.http.FormatType;
 import com.cscc.kit.http.HttpClientConfig;
 import com.cscc.kit.http.HttpRequest;
-import com.cscc.kit.http.IHttpClient;
-import com.cscc.kit.http.X509TrustAll;
-import com.cscc.kit.utils.IOUtils;
+import com.cscc.kit.http.AbstractHttpClient;
+import com.cscc.kit.util.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -50,7 +49,7 @@ import org.apache.http.ssl.TrustStrategy;
  * @author VK.Gao
  * @date 2018/04/02
  */
-public class ApacheHttpClient extends IHttpClient {
+public class ApacheHttpClient extends AbstractHttpClient {
 
     protected static final String CONTENT_TYPE = "Content-Type";
     protected static final String ACCEPT_ENCODING = "Accept-Encoding";
@@ -86,7 +85,7 @@ public class ApacheHttpClient extends IHttpClient {
         // https
         RegistryBuilder<ConnectionSocketFactory> socketFactoryRegistryBuilder = RegistryBuilder.create();
         socketFactoryRegistryBuilder.register("http", new PlainConnectionSocketFactory());
-        if (config.isIgnoreSSLCerts() || X509TrustAll.isIgnoreSSLCerts()) {
+        if (config.isIgnoreSSLCerts() ){//|| X509TrustAll.isIgnoreSSLCerts()) {
             try
             {
                 SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy()

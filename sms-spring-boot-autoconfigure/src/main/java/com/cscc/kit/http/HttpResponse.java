@@ -19,7 +19,7 @@ Z * Licensed to the Apache Software Foundation (ASF) under one
 package com.cscc.kit.http;
 
 
-public class HttpResponse extends HttpMessage {
+public class HttpResponse extends AbstractHttpMessage {
 
     private int status;
 

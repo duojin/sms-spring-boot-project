@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * @Description: 短信配置池
- * @Author ajoe
+ * @author ajoe.Liu
  * @Date 2019/12/17 11:19
  */
 public class SmsConfigurations {

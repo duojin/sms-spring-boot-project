@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * @Description: TODO(这里用一句话描述这个类的作用)
- * @Author ajoe
+ * @author ajoe.Liu
  * @Date 2019/12/16 16:00
  */
 public class SendBatchSmsParam implements CheckParamNeeded {

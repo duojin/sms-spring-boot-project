@@ -1,4 +1,4 @@
-package com.cscc.kit.utils;
+package com.cscc.kit.util;
 
 import java.io.Closeable;
 import java.io.IOException;

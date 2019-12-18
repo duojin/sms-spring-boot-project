@@ -23,7 +23,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class HttpMessage {
+/**
+ * @author ajoe.Liu
+ */
+public abstract class AbstractHttpMessage {
 
     protected static final String CONTENT_TYPE = "Content-Type";
     protected static final String CONTENT_LENGTH = "Content-Length";
@@ -37,17 +40,17 @@ public abstract class HttpMessage {
     protected Integer connectTimeout = null;
     protected Integer readTimeout = null;
 
-    public HttpMessage(String strUrl) {
+    public AbstractHttpMessage(String strUrl) {
         this.url = strUrl;
         this.headers = new HashMap<String, String>();
     }
 
-    public HttpMessage(String strUrl, Map<String, String> tmpHeaders) {
+    public AbstractHttpMessage(String strUrl, Map<String, String> tmpHeaders) {
         this.url = strUrl;
         if (null != tmpHeaders) { this.headers = tmpHeaders; }
     }
 
-    public HttpMessage() {
+    public AbstractHttpMessage() {
     }
 
     public String getUrl() {

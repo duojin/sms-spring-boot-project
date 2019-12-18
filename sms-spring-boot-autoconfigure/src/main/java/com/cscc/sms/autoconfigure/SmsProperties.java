@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @Description: 短信配置类
- * @Author ajoe
+ * @author ajoe.Liu
  * @Date 2019/12/16 17:35
  */
 @Data

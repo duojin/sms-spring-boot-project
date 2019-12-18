@@ -1,9 +1,12 @@
 cscc:
   sms:
-    aliyun:
-      appid: xxxx
-      aliyunkey: aaa
     guodu:
-      guodukey: 123
-      appid: fff
-debug: true
+      #      open: true
+      appid: xxxxx
+      appkey: 213213
+      sendUrls:
+        - http://x.x.x.x:8000/c/s
+        - http://x.x.7.x:8000/c/s
+      queryUrls:
+        - http://x.x.x.x:8081/cc/v
+#debug: true

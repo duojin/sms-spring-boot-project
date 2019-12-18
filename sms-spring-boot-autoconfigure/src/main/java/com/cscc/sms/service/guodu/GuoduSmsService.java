@@ -1,10 +1,8 @@
 package com.cscc.sms.service.guodu;
 
+import com.cscc.kit.util.MiniHttpClientUtils;
 import com.cscc.sms.autoconfigure.SmsProperties;
-import com.cscc.sms.domain.QuerySendDetailsParam;
-import com.cscc.sms.domain.SendBatchSmsParam;
-import com.cscc.sms.domain.SendSmsParam;
-import com.cscc.sms.domain.SmsResponse;
+import com.cscc.sms.domain.*;
 import com.cscc.sms.service.PageList;
 import com.cscc.sms.service.SmsSendDetail;
 import com.cscc.sms.service.SmsService;
@@ -15,13 +13,11 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
- * @Description: TODO(这里用一句话描述这个类的作用)
- * @Author ajoe
+ * @Description: 国都企信通短信服务
+ * @author ajoe.Liu
  * @Date 2019/12/16 17:54
  */
 @Slf4j
@@ -31,7 +27,9 @@ public class GuoduSmsService implements SmsService {
 
     private String appid;
     private String appkey;
-    private List<String> serverBaseUrls;
+    private boolean open;
+    private List<String> sendUrls;
+    private List<String> queryUrls;
 
     public GuoduSmsService(SmsProperties smsProperties) {
         log.debug("{}正在构造,smsProperties={}",this.getClass().getName(),smsProperties);
@@ -39,11 +37,14 @@ public class GuoduSmsService implements SmsService {
         this.smsProperties = smsProperties;
         this.appid = smsProperties.getGuodu().getAppid();
         this.appkey = smsProperties.getGuodu().getAppkey();
-        this.serverBaseUrls = smsProperties.getGuodu().getServerBaseUrls();
+        this.open = smsProperties.getGuodu().isOpen();
+        this.sendUrls = smsProperties.getGuodu().getSendUrls();
+        this.queryUrls = smsProperties.getGuodu().getQueryUrls();
 
         Assert.hasText(appid,"appid is empty or null");
         Assert.hasText(appkey,"appkey is empty or null");
-        Assert.notEmpty(serverBaseUrls,"serverBaseUrls is empty");
+        Assert.notEmpty(sendUrls,"sendUrls is empty");
+        Assert.notEmpty(queryUrls,"queryUrls is empty");
     }
 
     @Override
@@ -52,15 +53,67 @@ public class GuoduSmsService implements SmsService {
 
         //simple check
         param.checkParam();
-        Map requestParam = buildQureyParam(param);
+        Map<String, String> queryParas = buildQureyParam(param);
 
+        try{
+            String responseXml = loopSend(param, queryParas);
 
+            return new SmsResponse()
+                    .setCode(ResultCode.SUCCESS)
+                    .setMsg("发送成功")
+                    .setData(responseXml);
+        }catch (Exception e){
+            return new SmsResponse()
+                    .setCode(ResultCode.FAIL)
+                    .setMsg(e.getMessage());
+        }
 
-
-        return null;
     }
 
-    private Map buildQureyParam(SendSmsParam param) {
+    private String loopSend(SendSmsParam param, Map<String, String> queryParas) {
+        if(!open){
+            return "open=false";
+        }
+        String responseString = "";
+        int urlSize = sendUrls.size();
+        List<String> tempUrls = new ArrayList<>(urlSize);
+        sendUrls.forEach(url->tempUrls.add(url));
+        int tryCount = urlSize;
+        boolean isUrlChanged = false;
+        while (true){
+            String trySendUrl = tempUrls.get(0);
+            try {
+                log.info("发送短信使用地址为===>{}",trySendUrl);
+                responseString = MiniHttpClientUtils.get(trySendUrl,queryParas);
+                log.debug("{} 请求发送短信同步完成,url={},requestParam={}",this.getClass().getName(),trySendUrl,param);
+                log.debug("{} 请求发送短信同步完成,response={}",this.getClass().getName(),responseString);
+                break;
+            }catch (Exception e){
+                log.warn("发送短信[Exception]:{}",e.getMessage());
+                tryCount--;
+                if(tryCount>0){
+                    tempUrls.remove(0);
+                    tempUrls.add(trySendUrl);
+                    isUrlChanged = true;
+                }
+            }
+            if(tryCount==0){
+                log.error("请求地址{}试验完毕", StringUtils.arrayToCommaDelimitedString(sendUrls.toArray()));
+                throw new RuntimeException("所有配置短信地址均请求失败");
+            }
+        }
+
+        if(isUrlChanged){
+            synchronized (sendUrls){
+                sendUrls.clear();
+                tempUrls.forEach(url-> sendUrls.add(url));
+            }
+        }
+
+        return responseString;
+    }
+
+    private Map<String, String> buildQureyParam(SendSmsParam param) {
         Map<String, String> queryParas = new HashMap<>();
         queryParas.put("OperID", this.appid);
         queryParas.put("OperPass", this.appkey);
@@ -104,5 +157,24 @@ public class GuoduSmsService implements SmsService {
 
         System.out.println("GuoduSmsService querySendDetails");
         return null;
+    }
+
+
+    public SmsResponse queryBalance() {
+        try{
+            String tryQueryUrl = queryUrls.get(0);
+            Map<String, String> queryParas = new HashMap<>();
+            queryParas.put("OperID", this.appid);
+            queryParas.put("OperPass", this.appkey);
+            String responseString = MiniHttpClientUtils.get(tryQueryUrl,queryParas);
+            return new SmsResponse()
+                    .setCode(ResultCode.SUCCESS)
+                    .setMsg("查询成功")
+                    .setData(responseString);
+        }catch (Exception e){
+            return new SmsResponse()
+                    .setCode(ResultCode.FAIL)
+                    .setMsg(e.getMessage());
+        }
     }
 }

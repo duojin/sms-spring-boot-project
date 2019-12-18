@@ -5,12 +5,16 @@ import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Constructor;
 
+/**
+ * @author ajoe.Liu
+ */
+@SuppressWarnings("unchecked")
 public class HttpClientFactory {
 
     public static String HTTP_CLIENT_IMPL_KEY = "sdk.httpclient";
     public static String COMPATIBLE_HTTP_CLIENT_CLASS_NAME = CompatibleUrlConnClient.class.getName();
 
-    public static IHttpClient buildClient(HttpClientConfig clientConfig) {
+    public static AbstractHttpClient buildClient(HttpClientConfig clientConfig) {
         try {
             if (clientConfig == null) {
                 clientConfig = HttpClientConfig.getDefault();
@@ -28,10 +32,10 @@ public class HttpClientFactory {
                 customClientClassName = clientConfig.getClientType().getImplClass().getName();
             }
             Class httpClientClass = Class.forName(customClientClassName);
-            if (!IHttpClient.class.isAssignableFrom(httpClientClass)) {
+            if (!AbstractHttpClient.class.isAssignableFrom(httpClientClass)) {
                 throw new IllegalStateException(String.format("%s is not assignable from http.IHttpClient", customClientClassName));
             }
-            Constructor<? extends IHttpClient> constructor = httpClientClass.getConstructor(HttpClientConfig.class);
+            Constructor<? extends AbstractHttpClient> constructor = httpClientClass.getConstructor(HttpClientConfig.class);
             return constructor.newInstance(clientConfig);
         } catch (Exception e) {
             // keep compatibility

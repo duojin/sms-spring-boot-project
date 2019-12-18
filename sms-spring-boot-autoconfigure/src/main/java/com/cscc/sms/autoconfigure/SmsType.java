@@ -2,7 +2,7 @@ package com.cscc.sms.autoconfigure;
 
 /**
  * @Description: 短信提供商的分类
- * @Author ajoe
+ * @author ajoe.Liu
  * @Date 2019/12/17 10:42
  */
 public enum SmsType {

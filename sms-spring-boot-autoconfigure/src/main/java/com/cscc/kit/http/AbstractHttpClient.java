@@ -8,11 +8,11 @@ import java.util.concurrent.Future;
  * @author VK.Gao
  * @date 2018/03/28
  */
-public abstract class IHttpClient implements Closeable {
+public abstract class AbstractHttpClient implements Closeable {
 
     protected boolean ignoreHttpsCert = false;
 
-    public IHttpClient(HttpClientConfig clientConfig) throws ClientException {
+    public AbstractHttpClient(HttpClientConfig clientConfig) throws ClientException {
         if (clientConfig == null) {
             clientConfig = HttpClientConfig.getDefault();
         }
